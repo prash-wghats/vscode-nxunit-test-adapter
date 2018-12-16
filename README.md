@@ -32,7 +32,7 @@ Property                        | Description
 `nxunitExplorer.xunit`    		| The path to the xunit console runner. If this option is not set then extention will search packages/xunit.runner.console*/tools/xunit.console.exe (relative to the workspace folder).
 `nxunitExplorer.monoruntime`	| The path to the Mono binary
 `nxunitExplorer.usemono`		| use Mono instead of Desktop .Net (default `false` for Windows). This option is always `true` for other platforms
-`nxunitExplorer.skippattern`	| Assemblies to skip from searching for tests.(default: `"nunit\\..*\\.dll|xunit\\..*\\.dll"`i.e exclude any files starting with nunit.*.dll or xunit.*.dll)
+`nxunitExplorer.skippattern`	| Assemblies to skip from searching for tests.(default: exclude any files starting with nunit.\*.dll or xunit.\*.dll)
 
 
 
