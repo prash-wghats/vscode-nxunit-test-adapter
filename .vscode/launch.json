@@ -1,0 +1,59 @@
+{
+	"version": "0.2.0",
+	"configurations": [{
+			"type": "extensionHost",
+			"request": "launch",
+			"name": "Launch Extension",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}"
+			],
+			"outFiles": [
+				"${workspaceFolder}/out/**/*.js"
+			],
+			"preLaunchTask": "npm"
+		},
+		{
+			"type": "extensionHost",
+			"request": "launch",
+			"name": "NXunit adapter",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}"
+			],
+			"outFiles": [
+				"${workspaceFolder}/out"
+			]
+		},
+		{
+			"name": "testrun",
+			"type": "clr",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"program": "${workspaceFolder}/bin/Debug/testrun.exe",
+			"args": [
+				"-x", "e:\\build\\UNIT\\Xunit\\xunit.console.exe", 
+				"-n", "e:\\build\\UNIT\\\\Nunit\\nunit3-console.exe",
+				"discover", "-t", 
+				"../unittest/bin/Debug/bank.dll"
+			],
+		},
+		
+		{
+			"name": "testrunm",
+			"type": "mono",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"program": "${workspaceFolder}/bin/Debug/testrun.exe",
+			"args": [
+				"-m", "mono",
+				"-x", "e:\\build\\UNIT\\Xunit\\xunit.console.exe", 
+				"-n", "e:\\build\\UNIT\\\\Nunit\\nunit3-console.exe",
+				"discover", "-t", 
+				"../unittest/bin/Debug/bank.dll"
+			],
+			"console": "internalConsole",
+
+		}
+	]
+}
