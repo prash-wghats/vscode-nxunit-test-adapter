@@ -57,7 +57,7 @@ export class NXunitAdapter implements TestAdapter {
 		private readonly outputchannel: vscode.OutputChannel,
 		private readonly log: Log
 	) {
-		this.Log('Initializing example adapter');
+		this.Log('Initializing NXunit adapter');
 
 		this.disposables.push(this.testsEmitter);
 		this.disposables.push(this.testStatesEmitter);
@@ -84,7 +84,8 @@ export class NXunitAdapter implements TestAdapter {
 
 		let xexe = this.GetConfigPara("xunit");
 		let nexe = this.GetConfigPara("nunit");
-		/**
+		
+		/*
 		 * The glob describing the location of your 
 		 * test files (relative to the workspace folder)
 		 */
@@ -125,7 +126,8 @@ export class NXunitAdapter implements TestAdapter {
 				});
 		} catch (e) {
 			this.Log(e);
-			this.testsEmitter.fire(<TestLoadFinishedEvent>{ type: 'finished', suite: undefined, errorMessage: e.toString() });
+			this.testsEmitter.fire(<TestLoadFinishedEvent>{ type: 'finished', 
+			    suite: undefined, errorMessage: e.toString() });
 		}
 
 	}

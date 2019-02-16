@@ -16,10 +16,17 @@
 		},
 		{
 			"label": "testrun",
-			"args": ["/p:Configuration=Debug", "testrun.sln"],
+			"args": [
+				"/p:Configuration=Release",
+				"testrun.sln"
+			],
 			"suppressTaskName": true,
-			// Use the standard MS compiler pattern to detect errors, warnings and infos
 			"problemMatcher": "$msCompile"
 		},
+		{
+			"type": "npm",
+			"script": "publish",
+			"problemMatcher": []
+		}
 	]
 }

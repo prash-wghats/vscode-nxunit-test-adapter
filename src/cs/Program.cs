@@ -108,6 +108,7 @@ class Program {
 
 	static string FullPath(string path)
 	{
+		path = Environment.ExpandEnvironmentVariables(path);
 		if (Path.IsPathRooted(path) == false)
 			return Path.GetFullPath(path);
 

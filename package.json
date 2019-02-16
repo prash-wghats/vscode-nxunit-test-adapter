@@ -5,7 +5,7 @@
   "icon": "img/icon.png",
   "author": "PK",
   "publisher": "wghats",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "homepage": "https://github.com/prash-wghats/vscode-nxunit-test-adapter",
   "repository": {
