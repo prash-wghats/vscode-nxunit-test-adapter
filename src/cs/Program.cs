@@ -25,8 +25,8 @@ class Program {
 	{
 		Console.Error.WriteLine("testrun  -x <xunit location> -n <nunit location> " +
 		    "-m <mono location> " + 
-			" [discover -t <semicolon sep target directory or assembly> | " +
-		    "run -t <semicolon sep target directory or assembly> " + 
+			" [discover [-t <semicolon sep target directory or assembly> | -f file] | " +
+		    "run [-t <semicolon sep target directory or assembly> | -f file] " + 
 			" -am <semicolon sep methodname> -ac <semicolon sep classname> | " +
 		    "debug  -t <target assembly> -am <methodname> ]");
 		Environment.Exit(1);
@@ -121,7 +121,7 @@ class Program {
 	static void Main(string[] args)
 	{
 		int arg = 0, depth=0;
-		int runmode=0;
+		int runmode=-1;
 		List<TestInfo> ltest = new List<TestInfo>();
 		List<string> target = new List<string>(),
 		methods=new List<string>(), types=new List<string>();
@@ -133,12 +133,24 @@ class Program {
 		while (arg < args.Length) {
 			switch (args[arg]) {
 			case "discover":
+			if (runmode != -1) {
+				usage();
+				return;
+			}
 				runmode = 0;
 				break;
 			case "run":
+			if (runmode != -1) {
+				usage();
+				return;
+			}
 				runmode = 1;
 				break;
 			case "debug":
+			if (runmode != -1) {
+				usage();
+				return;
+			}
 				runmode = 2;
 				break;
 			case "-m":
@@ -156,6 +168,11 @@ class Program {
 			case "-t":
 				var s = args[++arg];
 				target = s.Split(new[] { ';' },
+				        StringSplitOptions.RemoveEmptyEntries).ToList();
+				break;
+			case "-f":
+				var fs = args[++arg];
+				target = new StreamReader(fs).ReadToEnd().Split(new[] { ';' },
 				        StringSplitOptions.RemoveEmptyEntries).ToList();
 				break;
 			case "-am":

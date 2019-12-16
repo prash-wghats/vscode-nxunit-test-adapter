@@ -16,10 +16,10 @@ debug: $TESTRUN_DEBUG
 	npm run build
 
 $TESTRUN_RELEASE:
-	msbuild /p:Configuration=Release testrun.sln
+	msbuild /p:Configuration=Release  /p:Platform="Any CPU" testrun.sln
 
 $TESTRUN_DEBUG:
-	msbuild /p:Configuration=Debug testrun.sln
+	msbuild /p:Configuration=Debug  /p:Platform="Any CPU" testrun.sln
 
 clean:
 	git clean -xfd

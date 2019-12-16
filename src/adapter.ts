@@ -3,6 +3,8 @@ import { spawn } from 'child_process';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
+import * as crypto from 'crypto';
 
 import {
 	TestAdapter,
@@ -215,7 +217,7 @@ export class NXunitAdapter implements TestAdapter {
 
 		if (!debugSessionStarted) {
 			this.log.error('Failed starting the debug session - aborting');
-			if (this.Runningtest)
+			if (this.Runningtest && this.Runningtest.stdin)
 				this.Runningtest.stdin.write('Done\n');
 			return;
 		}
@@ -223,7 +225,7 @@ export class NXunitAdapter implements TestAdapter {
 		const currentSession = vscode.debug.activeDebugSession;
 		if (!currentSession) {
 			this.log.error('No active debug session - aborting');
-			if (this.Runningtest)
+			if (this.Runningtest && this.Runningtest.stdin)
 				this.Runningtest.stdin.write('Done\n');
 			return;
 		}
@@ -232,7 +234,7 @@ export class NXunitAdapter implements TestAdapter {
 			if (currentSession != session) return;
 			if (breakpoint)
 				vscode.debug.removeBreakpoints([breakpoint]);
-			if (this.Runningtest)
+			if (this.Runningtest && this.Runningtest.stdin)
 				this.Runningtest.stdin.write('Done\n');
 			this.Log('Debug session ended');
 			subscription.dispose();
@@ -294,10 +296,10 @@ export class NXunitAdapter implements TestAdapter {
 			let exes = cmdargs[0];
 			let dll = cmdargs.slice(1);
 			this.Loadingtest = spawn(exes, dll, { cwd: this.workspace.uri.fsPath });
-			this.Loadingtest.stdout.on('data', data => {
+			this.Loadingtest.stdout!.on('data', data => {
 				stdout += data;
 			});
-			this.Loadingtest.stderr.on('data', data => {
+			this.Loadingtest.stderr!.on('data', data => {
 				//stderr += data;
 				this.outputchannel.append(data.toString());
 			});
@@ -538,7 +540,7 @@ export class NXunitAdapter implements TestAdapter {
 			let list = cmdargs[0];
 			let cmds = cmdargs.slice(1);
 			this.Runningtest = spawn(list, cmds, { cwd: this.workspace.uri.fsPath });
-			this.Runningtest.stdout.on('data', data => {
+			this.Runningtest.stdout!.on('data', data => {
 				if (debugging) {
 					debugging = false;
 					//console.log(data.toString());
@@ -551,7 +553,7 @@ export class NXunitAdapter implements TestAdapter {
 					teststodo = this.ParseTestResults(data.toString(), teststodo);
 				}
 			});
-			this.Runningtest.stderr.on('data', data => {
+			this.Runningtest.stderr!.on('data', data => {
 				this.outputchannel.append(data.toString());
 			});
 
@@ -727,7 +729,15 @@ export class NXunitAdapter implements TestAdapter {
 			args.push('-n'); args.push(nexe);
 		}
 		args.push(mode);
-		args.push('-t'); args.push(target);
+		{
+			var filename = 'nxunit_'+crypto.randomBytes(4).readUInt32LE(0);
+			const temp = path.join(os.tmpdir(), filename);
+			fs.writeFileSync(temp, target);
+			args.push('-f'); args.push(temp);
+		}
+		{
+			//args.push('-t'); args.push(target);
+		}
 		if (types) {
 			args.push('-ac'); args.push(types);
 		}
