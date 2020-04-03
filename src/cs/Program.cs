@@ -567,7 +567,7 @@ class Program {
 		List<TestCase> lst = new List<TestCase>();
 
 		if (run==0) {
-			args = f + " --explore="+tmps;
+			args = '"' + f + '"' + " --explore="+tmps;
 		} else {
 			if (types != null && types.Count > 0) {
 				m = string.Join(",", types);
@@ -579,7 +579,7 @@ class Program {
 			}
 			if (m != null)
 				m = "--test="+m;
-			args = f  +' '+m + " --inprocess" + " --result="+tmps;
+			args = '"' + f + '"' +' '+m + " --inprocess" + " --result="+tmps;
 
 		}
 
