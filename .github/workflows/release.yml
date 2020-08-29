@@ -1,0 +1,32 @@
+name: Release Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2.3.2
+    - uses: microsoft/setup-msbuild@v1.0.1
+    - uses: actions/setup-node@v1.4.3
+    - run: |
+        npm version "${{ github.event.inputs.version }}"
+        .\makefile.bat
+    - uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.event.inputs.version }}
+        release_name: Release v${{ github.event.inputs.version }}
+    - uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./vscode-nxunit-test-adapter-${{ github.event.inputs.version }}.vsix
+        asset_name: vscode-nxunit-test-adapter-${{ github.event.inputs.version }}.vsix
+        asset_content_type: application/zip
