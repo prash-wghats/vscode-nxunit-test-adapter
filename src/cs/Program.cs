@@ -39,7 +39,6 @@ class Program {
 
 		public void Print(int run)
 		{
-			Console.OutputEncoding = Encoding.UTF8;
 			if (run == 0)
 				Console.WriteLine("{0};{1}", type, modname);
 
@@ -201,6 +200,8 @@ class Program {
 			Console.Error.WriteLine("Unit runners missing");
 			return;
 		}
+
+		Console.OutputEncoding = Encoding.UTF8;
 
 		if (runmode==0)
 			ltest = ProcessTests(runmode, target,ltest);
