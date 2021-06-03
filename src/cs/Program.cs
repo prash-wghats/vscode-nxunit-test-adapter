@@ -515,7 +515,7 @@ class Program {
 			foreach(var m in methods) {
 				//method(ss) to method
 				var s = m.Substring(0,m.IndexOf('(') == -1? m.Length:m.IndexOf('('));
-				args += " -method " + s;
+				args += " -method \"" + s.Replace ("\"", "\\\"") + "\"";
 			}
 			cons += '|'+ string.Join("|", methods.ToArray());
 		}
@@ -525,7 +525,7 @@ class Program {
 			aargs = " --debug " +  xrunner +' ' + f + args + " -xml " + tmps;
 		} else {
 			exe = xrunner;
-			aargs = f + args + " -xml " + tmps;
+			aargs = $"\"{f}\"" + args + " -xml " + tmps;
 		}
 
 		if (run==1) {	//run tests
@@ -578,8 +578,8 @@ class Program {
 				cons += "|" + string.Join("|", methods);
 			}
 			if (m != null)
-				m = "--test="+m;
-			args = f  +' '+m + " --inprocess" + " --result="+tmps;
+				m = "--test=\""+m.Replace ("\"", "\\\"")+"\"";
+			args = $"\"{f}\""  +' '+m + " --inprocess" + " --result="+tmps;
 
 		}
 
